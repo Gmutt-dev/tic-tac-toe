@@ -75,55 +75,73 @@ const game = (function gameController() {
     }
         
     function checkForWin() {
-        const marker = currentPlayer.getMarker();
-
+        const playerMarker = currentPlayer.getMarker();
+        
         function checkRows() {
             gameboard.getLayout().forEach((row) => {
-                if (row.filter((mark) => mark === marker).length === 3) setWinner(); //winner
-            })
+                if (row.filter((mark) => mark === playerMarker).length === 3)
+                    setWinner();
+            });
         }
-
+        
         function checkColumns() {
-
+            //for every column (loop)
+            for (let col = 0; col < 3; col++) {
+                //for every row item (loop)
+                for (let row = 0; row < 3; row++) {
+                    //check until 3 player marks or break;
+                    if (gameboard.getLayout()[row][col] !== playerMarker)
+                        break;
+                    // if 3 player marks setWinner();
+                    if (row === 2)
+                        setWinner();
+                }
+            }  
         }
-
-        function checkDiagonalForward() {
-
+        
+        function checkDiagonal() {
+            //only if playerMarker === to middle spot [1][1], since diagonal win only possible if currentPlayer controls that spot
+            console.log(gameboard.getLayout());
+            if (playerMarker === gameboard.getLayout()[1][1]) {
+                if (
+                    playerMarker === gameboard.getLayout()[0][0] && playerMarker === gameboard.getLayout()[2][2] || //backward diagonal
+                    playerMarker === gameboard.getLayout()[2][0] && playerMarker === gameboard.getLayout()[0][2]    //forward diagonal
+                )
+                setWinner();
+            }
         }
-
-        function checkDiagonalBackward() {
-
-        }
-
+        
+        
         checkRows();
-        checkColumns();
-        checkDiagonalForward();
-        checkDiagonalBackward();
-
+        if (!winner) checkColumns();
+        if (!winner) checkDiagonal();
     }
-
+            
     // Play round
     function playRound(row, col) {
-
+        
         if (currentPlayer !== playerOne && currentPlayer !== playerTwo) {
             throw Error("First player needs to be assigned first!")
-        }
-        else if (gameboard.placeMarker(currentPlayer.getMarker(), parseInt(row), parseInt(col))) {
+        } else if (!winner) {
+            if (gameboard.placeMarker(currentPlayer.getMarker(), parseInt(row), parseInt(col))) {
                 checkForWin();
                 changeTurn();                
+            } // else ignore input, as spot already taken
+        } else {
+            throw Error("No further rounds when a winner has been declared!");
         }
     }
-
+    
     function reset() {
         currentPlayer = {};
         winner = "";
         gameboard.resetBoard();
     }
-
-
+    
+    
     return {setCurrentPlayer, getCurrentPlayer, getWinner, playRound, reset}; 
 }
-    
+
 )();
 
 
@@ -143,11 +161,19 @@ console.log(playerOne, playerTwo);
 game.setCurrentPlayer(playerOne);
 if(!game.getWinner()) {
     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("0", "0");
-
+    game.playRound("1", "0");
+    
 } else {
     console.log(`The winner is ${game.getWinner()}`);
-    game.reset();
+    // game.reset();
+}
+if(!game.getWinner()) {
+    console.log(`${game.getCurrentPlayer().getName()}'s turn`);
+    game.playRound("1", "2");
+    
+} else {
+    console.log(`The winner is ${game.getWinner()}`);
+    // game.reset();
 }
 if(!game.getWinner()) {
     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
@@ -155,40 +181,32 @@ if(!game.getWinner()) {
 
 } else {
     console.log(`The winner is ${game.getWinner()}`);
-    game.reset();
+    // game.reset();
 }
 if(!game.getWinner()) {
     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
     game.playRound("0", "1");
-
+    
 } else {
     console.log(`The winner is ${game.getWinner()}`);
-    game.reset();
+    // game.reset();
 }
 if(!game.getWinner()) {
     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
     game.playRound("2", "0");
-
+    
 } else {
     console.log(`The winner is ${game.getWinner()}`);
-    game.reset();
+    // game.reset();
 }
 if(!game.getWinner()) {
     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("0", "2");
-
+    game.playRound("2", "1");
+    
 } else {
+    
     console.log(`The winner is ${game.getWinner()}`);
-    game.reset();
+    // game.reset();
 }
-if(!game.getWinner()) {
-    console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("2", "2");
-
-} else {
-    console.log(`The winner is ${game.getWinner()}`);
-    game.reset();
-}
-console.log(gameboard.getLayout());
 
 ////endTEMP
