@@ -52,6 +52,7 @@ const gameboard = (function() {
 const game = (function gameController() {
 
     let currentPlayer = {};
+    let openSpots = 9;
     let winner = "";
 
     function setCurrentPlayer(player) {
@@ -72,6 +73,10 @@ const game = (function gameController() {
 
     function changeTurn() {
         currentPlayer = (currentPlayer === playerOne) ? playerTwo : playerOne;
+    }
+
+    function isTie() {
+        return openSpots === 0;
     }
         
     function checkForWin() {
@@ -101,7 +106,6 @@ const game = (function gameController() {
         
         function checkDiagonal() {
             //only if playerMarker === to middle spot [1][1], since diagonal win only possible if currentPlayer controls that spot
-            console.log(gameboard.getLayout());
             if (playerMarker === gameboard.getLayout()[1][1]) {
                 if (
                     playerMarker === gameboard.getLayout()[0][0] && playerMarker === gameboard.getLayout()[2][2] || //backward diagonal
@@ -110,23 +114,22 @@ const game = (function gameController() {
                 setWinner();
             }
         }
-        
-        
+            
         checkRows();
         if (!winner) checkColumns();
         if (!winner) checkDiagonal();
     }
             
-    // Play round
     function playRound(row, col) {
         
         if (currentPlayer !== playerOne && currentPlayer !== playerTwo) {
             throw Error("First player needs to be assigned first!")
-        } else if (!winner) {
+        } else if (!winner && !isTie()) {
             if (gameboard.placeMarker(currentPlayer.getMarker(), parseInt(row), parseInt(col))) {
+                openSpots--;
                 checkForWin();
                 changeTurn();                
-            } // else ignore input, as spot already taken
+            } // else ignore input, as spot already taken or win state or tie state
         } else {
             throw Error("No further rounds when a winner has been declared!");
         }
@@ -137,15 +140,22 @@ const game = (function gameController() {
         winner = "";
         gameboard.resetBoard();
     }
-    
-    
-    return {setCurrentPlayer, getCurrentPlayer, getWinner, playRound, reset}; 
-}
-
-)();
+     
+    return {setCurrentPlayer, getCurrentPlayer, getWinner, isTie, playRound, reset}; 
+})();
 
 
+// Display Controller
+const display = (function displayController() {
+    // Initial eventlisteners
 
+
+    function updateDisplay() {
+
+    }
+
+
+})();
 
 
 ////TEMP console controller for testing
