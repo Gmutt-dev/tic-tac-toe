@@ -55,10 +55,20 @@
     & .player-select {
         grid-column: span 2;
         justify-self: center;
+        padding: 10px 15px;
+
+        & fieldset {
+            padding: 5px 10px;
+            border-radius: 15px;
+            background-color: white;
+            box-shadow: 0px 0px 4px;
+            border: none;
+        }
     }
 
     & .start-game {
         grid-column: span 2;
+        padding: 10px;
     }
     
     & .gameboard-container {
