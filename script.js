@@ -143,6 +143,7 @@ const game = (function gameController() {
     
     function resetGame() {
         currentPlayer = {};
+        openSpots = 9;
         winner = "";
         gameboard.resetBoard();
     }
