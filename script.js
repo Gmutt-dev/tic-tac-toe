@@ -160,6 +160,15 @@ const display = (function displayController() {
     // Initial eventlisteners
     buttonChangeNamePlayerOne.addEventListener("click", changePlayerName);
     buttonChangeNamePlayerTwo.addEventListener("click", changePlayerName);
+ 
+    // Get the radio selection of which player starts the game and returns player
+    function getWhoStarts() {
+        const fieldsetWhoStarts = document.querySelector(".player-select > fieldset");
+        if (fieldsetWhoStarts.elements["player-one-start"].checked) return playerOne;
+        else if (fieldsetWhoStarts.elements["player-two-start"].checked) return playerTwo;
+        else if (Math.random() < 0.5) return playerOne;
+        else return playerTwo;
+    }
 
     function updateDisplay() {
 
@@ -216,7 +225,7 @@ const display = (function displayController() {
         renderGameboard();
     }
 
-    // return {renderGameboard};  ???Necessary to return an interface?
+    return {};  //???Necessary to return an interface?
 })();
 
 
