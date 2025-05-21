@@ -55,7 +55,7 @@ const game = (function gameController() {
     let openSpots = 9;
     let winner = "";
 
-    function setCurrentPlayer(player) {
+    function setInitialPlayer(player) {
         currentPlayer = player;
     }
 
@@ -141,13 +141,15 @@ const game = (function gameController() {
         gameboard.resetBoard();
     }
      
-    return {setCurrentPlayer, getCurrentPlayer, getWinner, isTie, playRound, resetGame}; 
+    return {setInitialPlayer, getCurrentPlayer, getWinner, isTie, playRound, resetGame}; 
 })();
 
 
 // Display Controller
 const display = (function displayController() {
-    // Initial eventlisteners
+    // Get outer container DOM reference
+    const outerContainer = document.querySelector(".outer-container");
+    // Initial eventlisteners?
 
 
     function updateDisplay() {
@@ -173,7 +175,7 @@ const display = (function displayController() {
                 gameboardElement.appendChild(button);
             }
         }
-        
+       
         return gameboardElement;
     }
 
@@ -195,14 +197,15 @@ const display = (function displayController() {
 
 ////TEMP console controller for testing
 
-const playerOne = player("John", "X");
-const playerTwo = player("Sarah", "O");
-console.log(playerOne, playerTwo);
+// create initial two player objects
+const playerOne = player("Player1", "X");
+const playerTwo = player("Player2", "O");
 
 // set first to play
-game.setCurrentPlayer(playerOne);
+game.setInitialPlayer(playerOne);
 
-display.renderGameboard();
+// intitial render
+// display.renderGameboard();
 
 // if(!game.getWinner()) {
 //     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
