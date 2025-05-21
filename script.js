@@ -56,7 +56,8 @@ const game = (function gameController() {
     let winner = "";
 
     function setInitialPlayer(player) {
-        currentPlayer = player;
+        if (currentPlayer !== playerOne && currentPlayer !== playerTwo) currentPlayer = player;
+            else throw Error("Initial player already set");
     }
 
     function getCurrentPlayer() {
