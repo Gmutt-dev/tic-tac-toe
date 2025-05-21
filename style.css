@@ -1,0 +1,18 @@
+.gameboard-container {
+
+    & .gameboard {
+        background-color: black;
+    
+        display: grid;
+        grid: 100px 100px 100px / 100px 100px 100px;
+        gap: 5px;
+    
+        & .spot {
+            background-color: white;
+    
+            &:hover {
+                background-color: lightgray;
+            }
+        }
+    }
+}

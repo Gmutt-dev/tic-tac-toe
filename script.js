@@ -135,13 +135,13 @@ const game = (function gameController() {
         }
     }
     
-    function reset() {
+    function resetGame() {
         currentPlayer = {};
         winner = "";
         gameboard.resetBoard();
     }
      
-    return {setCurrentPlayer, getCurrentPlayer, getWinner, isTie, playRound, reset}; 
+    return {setCurrentPlayer, getCurrentPlayer, getWinner, isTie, playRound, resetGame}; 
 })();
 
 
@@ -153,8 +153,43 @@ const display = (function displayController() {
     function updateDisplay() {
 
     }
+    
+    
+    function createGameboard() {
+        const gameboardLayout = gameboard.getLayout();
+        const gameboardElement = document.createElement("div");
+        gameboardElement.classList.add("gameboard");
+        
+        //for every outer row
+        for (let row = 0; row < gameboardLayout.length; row++) {
+            //loop over every inner column
+            for (let col = 0; col < gameboardLayout[row].length; col++) {
+                const button = document.createElement("button");
+                button.classList.add("spot")
+                button.dataset.position = `${row}${col}`;
+                button.textContent = gameboardLayout[row][col];
+                // add eventlisteners on all spots
+                button.addEventListener("click", playRound)
+                gameboardElement.appendChild(button);
+            }
+        }
+        
+        return gameboardElement;
+    }
 
+    function renderGameboard() {
+        const gameboardContainer = document.querySelector(".gameboard-container");
+        gameboardContainer.textContent = ""; // Clear current gameboard display;
+        gameboardContainer.appendChild(createGameboard());
+    }
+    
+    function playRound(event) {
+        if (event.target.textContent === "") game.playRound(event.target.dataset.position[0],event.target.dataset.position[1]);
+            else alert("Can't place marker on already occupied spot.\nPlease try again");
+        renderGameboard();
+    }
 
+    return {renderGameboard};
 })();
 
 
@@ -164,59 +199,59 @@ const playerOne = player("John", "X");
 const playerTwo = player("Sarah", "O");
 console.log(playerOne, playerTwo);
 
-// gameboard.placeMarker(playerOne.getMarker(), 1, 0);
-// console.log(gameboard.getLayout());
-
 // set first to play
 game.setCurrentPlayer(playerOne);
-if(!game.getWinner()) {
-    console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("1", "0");
-    
-} else {
-    console.log(`The winner is ${game.getWinner()}`);
-    // game.reset();
-}
-if(!game.getWinner()) {
-    console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("1", "2");
-    
-} else {
-    console.log(`The winner is ${game.getWinner()}`);
-    // game.reset();
-}
-if(!game.getWinner()) {
-    console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("1", "1");
 
-} else {
-    console.log(`The winner is ${game.getWinner()}`);
-    // game.reset();
-}
-if(!game.getWinner()) {
-    console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("0", "1");
+display.renderGameboard();
+
+// if(!game.getWinner()) {
+//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
+//     game.playRound("1", "0");
     
-} else {
-    console.log(`The winner is ${game.getWinner()}`);
-    // game.reset();
-}
-if(!game.getWinner()) {
-    console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("2", "0");
+// } else {
+//     console.log(`The winner is ${game.getWinner()}`);
+//     // game.reset();
+// }
+// if(!game.getWinner()) {
+//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
+//     game.playRound("1", "2");
     
-} else {
-    console.log(`The winner is ${game.getWinner()}`);
-    // game.reset();
-}
-if(!game.getWinner()) {
-    console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-    game.playRound("2", "1");
+// } else {
+//     console.log(`The winner is ${game.getWinner()}`);
+//     // game.reset();
+// }
+// if(!game.getWinner()) {
+//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
+//     game.playRound("1", "1");
     
-} else {
+// } else {
+//     console.log(`The winner is ${game.getWinner()}`);
+//     // game.reset();
+// }
+// if(!game.getWinner()) {
+//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
+//     game.playRound("0", "1");
     
-    console.log(`The winner is ${game.getWinner()}`);
-    // game.reset();
-}
+// } else {
+//     console.log(`The winner is ${game.getWinner()}`);
+//     // game.reset();
+// }
+// if(!game.getWinner()) {
+//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
+//     game.playRound("2", "0");
+    
+// } else {
+//     console.log(`The winner is ${game.getWinner()}`);
+//     // game.reset();
+// }
+// if(!game.getWinner()) {
+//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
+//     game.playRound("2", "1");
+    
+// } else {
+    
+//     console.log(`The winner is ${game.getWinner()}`);
+//     // game.reset();
+// }
 
 ////endTEMP
