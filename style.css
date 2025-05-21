@@ -11,7 +11,8 @@
 
 .outer-container {
     margin: auto;
-    max-width: fit-content;
+    width: fit-content;
+    max-width: 500px;
     text-align: center;
     border: solid 1px black;
     box-shadow: 4px 4px 6px black;
@@ -77,6 +78,7 @@
 
         & .gameboard {
             background-color: black;
+            margin: 20px;
             max-width: fit-content;
         
             display: grid;
