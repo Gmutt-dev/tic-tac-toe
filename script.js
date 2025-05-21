@@ -214,11 +214,27 @@ const display = (function displayController() {
         gameboardContainer.textContent = ""; // Clear current gameboard display;
         gameboardContainer.appendChild(createGameboard());
     }
+
+    function showWinner() {
+        //TODO change to call dialog modal stating winner
+        alert(`The winner is: ${game.getCurrentPlayer().getName()}`);
+    }
+
+    function showTie() {
+        //TODO change to call dialog modal stating winner
+        alert("It's a tie!");
+    }
     
     function playRound(event) {
-        if (event.target.textContent === "") game.playRound(event.target.dataset.position[0],event.target.dataset.position[1]);
+        
+        if (game.getWinner() || game.isTie()) alert("Winner or Tie declared.  Please reset the game to continue");
+        else if (event.target.textContent === "") {
+            game.playRound(event.target.dataset.position[0],event.target.dataset.position[1]);
+            renderGameboard();
+            if (game.getWinner()) showWinner();
+            else if (game.isTie()) showTie();
+        }
         else alert("Can't place marker on already occupied spot.\nPlease try again");
-        renderGameboard();
     }
     
        // Get the radio selection of which player starts the game and returns player
