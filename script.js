@@ -10,11 +10,15 @@ function player(name, marker) {
         return name;
     }
 
+    function changeName(newName) {
+        name = newName;
+    }
+
     function getMarker() {
         return marker;
     }
     
-    return {getName, getMarker};
+    return {getName, changeName, getMarker};
 }
 
  // Gameboard factory function as IIFE module
@@ -150,14 +154,34 @@ const game = (function gameController() {
 const display = (function displayController() {
     // Get outer container DOM reference
     const outerContainer = document.querySelector(".outer-container");
-    // Initial eventlisteners?
-
+    // Get player name change button DOM references
+    const buttonChangeNamePlayerOne = document.querySelector(".player-one button");
+    const buttonChangeNamePlayerTwo = document.querySelector(".player-two button");
+    // Initial eventlisteners
+    buttonChangeNamePlayerOne.addEventListener("click", changePlayerName);
+    buttonChangeNamePlayerTwo.addEventListener("click", changePlayerName);
 
     function updateDisplay() {
 
     }
-    
-    
+
+    function renderPlayerName(player) {
+        let playerName;
+        // Select correct player name tag on DOM
+        if (player === playerOne) playerName = document.querySelector(`p.player-one-name`);
+            else playerName = document.querySelector(`p.player-two-name`);
+        // Change the player's name
+        playerName.textContent = `Name: ${player.getName()}`;
+    }
+
+    function changePlayerName(event) {
+        // Determine if player1 or player2
+        const player = event.target.classList.contains("player-one-name") ? playerOne : playerTwo;
+        const newName = prompt(`What is the new name?`, `${player === playerOne ? "Player1" : "Player2"}`);
+        player.changeName(newName);
+        renderPlayerName(player);
+    }
+
     function createGameboard() {
         const gameboardLayout = gameboard.getLayout();
         const gameboardElement = document.createElement("div");
@@ -192,15 +216,15 @@ const display = (function displayController() {
         renderGameboard();
     }
 
-    return {renderGameboard};
+    // return {renderGameboard};  ???Necessary to return an interface?
 })();
 
 
 ////TEMP console controller for testing
 
 // create initial two player objects
-const playerOne = player("Player1", "X");
-const playerTwo = player("Player2", "O");
+const playerOne = player("?", "X");
+const playerTwo = player("?", "O");
 
 // set first to play
 game.setInitialPlayer(playerOne);
