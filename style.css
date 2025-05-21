@@ -1,11 +1,16 @@
 .outer-container {
+    text-align: center;
     display: grid;
     grid-template-columns: 1fr 1fr;
-
+    
     & .player-select {
         grid-column: span 2;
     }
 
+    & .start-game {
+        grid-column: span 2;
+    }
+    
     & .gameboard-container {
         grid-column: span 2;
 
