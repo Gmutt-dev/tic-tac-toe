@@ -12,7 +12,7 @@
         <div class="playerone">
             <h1>Player One</h1>
             <div>
-                <p class="player-name">Name: Player1</p>
+                <p class="player-name">Name: ?</p>
                 <button type="button">change</button>
             </div>
             <p>X</p>
@@ -20,18 +20,21 @@
         <div class="playertwo">
             <h1>Player Two</h1>
             <div>
-                <p class="player-name">Name: Player2</p>
+                <p class="player-name">Name: ?</p>
                 <button type="button">change</button>
             </div>
             <p>O</p>
         </div>
         <div class="player-select">
-            <input type="radio" name="player-select" id="playerone-start"  value="playerone">
-            <label for="playerone-start">Player One</label>
-            <input type="radio" name="player-select" id="random-start" value="random" checked>
-            <label for="random-start">random player</label>
-            <input type="radio" name="player-select" id="playertwo-start" value="playertwo">
-            <label for="playertwo-start">Player Two</label>
+            <fieldset>
+                <legend>Who starts?</legend>
+                <input type="radio" name="player-select" id="playerone-start"  value="playerone">
+                <label for="playerone-start">Player One</label>
+                <input type="radio" name="player-select" id="random-start" value="random" checked>
+                <label for="random-start">random player</label>
+                <input type="radio" name="player-select" id="playertwo-start" value="playertwo">
+                <label for="playertwo-start">Player Two</label>
+            </fieldset>
         </div>
         <div class="start-game"><button type="button">Start / Restart<br>Game</button></div>
         <div class="gameboard-container">
