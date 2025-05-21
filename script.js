@@ -211,7 +211,8 @@ const display = (function displayController() {
     
     function renderGameboard() {
         const gameboardContainer = document.querySelector(".gameboard-container");
-        gameboardContainer.textContent = `${game.getCurrentPlayer().getName()}'s turn`; // Clear current gameboard display and show who's turn it is
+        // if winner, show winner's name, else show who's turn it is
+        gameboardContainer.textContent = (game.getWinner()) ? `The winner is ${game.getWinner()}` : `${game.getCurrentPlayer().getName()}'s turn`;
         gameboardContainer.appendChild(createGameboard());
     }
 
