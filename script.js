@@ -211,7 +211,7 @@ const display = (function displayController() {
     
     function renderGameboard() {
         const gameboardContainer = document.querySelector(".gameboard-container");
-        gameboardContainer.textContent = ""; // Clear current gameboard display;
+        gameboardContainer.textContent = `${game.getCurrentPlayer().getName()}'s turn`; // Clear current gameboard display and show who's turn it is
         gameboardContainer.appendChild(createGameboard());
     }
 
@@ -255,67 +255,6 @@ const display = (function displayController() {
     return {};  //???Necessary to return an interface?
 })();
 
-
-////TEMP console controller for testing
-
 // create initial two player objects
-const playerOne = player("?", "X");
-const playerTwo = player("?", "O");
-
-// set first to play
-game.setInitialPlayer(playerOne);
-
-// intitial render
-// display.renderGameboard();
-
-// if(!game.getWinner()) {
-//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-//     game.playRound("1", "0");
-    
-// } else {
-//     console.log(`The winner is ${game.getWinner()}`);
-//     // game.reset();
-// }
-// if(!game.getWinner()) {
-//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-//     game.playRound("1", "2");
-    
-// } else {
-//     console.log(`The winner is ${game.getWinner()}`);
-//     // game.reset();
-// }
-// if(!game.getWinner()) {
-//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-//     game.playRound("1", "1");
-    
-// } else {
-//     console.log(`The winner is ${game.getWinner()}`);
-//     // game.reset();
-// }
-// if(!game.getWinner()) {
-//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-//     game.playRound("0", "1");
-    
-// } else {
-//     console.log(`The winner is ${game.getWinner()}`);
-//     // game.reset();
-// }
-// if(!game.getWinner()) {
-//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-//     game.playRound("2", "0");
-    
-// } else {
-//     console.log(`The winner is ${game.getWinner()}`);
-//     // game.reset();
-// }
-// if(!game.getWinner()) {
-//     console.log(`${game.getCurrentPlayer().getName()}'s turn`);
-//     game.playRound("2", "1");
-    
-// } else {
-    
-//     console.log(`The winner is ${game.getWinner()}`);
-//     // game.reset();
-// }
-
-////endTEMP
+const playerOne = player("Player1", "X");
+const playerTwo = player("Player2", "O");
