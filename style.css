@@ -10,17 +10,55 @@
 }
 
 .outer-container {
+    margin: auto;
+    max-width: fit-content;
     text-align: center;
+    border: solid 1px black;
+    box-shadow: 4px 4px 6px black;
+
     display: grid;
     grid-template-columns: 1fr 1fr;
-    
+
+    & .player {
+        padding: 5px;
+
+        display: grid;
+        gap: 5px;
+        
+        & .player-name-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+
+            & button {
+                padding: 5px;
+            }
+        }
+
+        & .marker {
+            font-size: 4rem;
+            font-weight: bold;
+        }
+
+    }
+
+    & .player-one {
+        background-color: lightblue;
+
+    }
+
+    & .player-two {
+        background-color: lightcoral;
+    }
+
     & .player-select {
         grid-column: span 2;
         justify-self: center;
     }
 
     & .start-game {
-
+        grid-column: span 2;
     }
     
     & .gameboard-container {
