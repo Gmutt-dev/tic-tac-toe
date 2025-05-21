@@ -136,6 +136,7 @@ const game = (function gameController() {
                 changeTurn();                
             } // else ignore input, as spot already taken or win state or tie state
         } else {
+            console.log(openSpots);
             throw Error("No further rounds when a winner has been declared!");
         }
     }
@@ -157,32 +158,26 @@ const display = (function displayController() {
     // Get player name change button DOM references
     const buttonChangeNamePlayerOne = document.querySelector(".player-one button");
     const buttonChangeNamePlayerTwo = document.querySelector(".player-two button");
+    // Get Start / Restart Game button DOM reference
+    const buttonStartGame = document.querySelector(".start-game button")
     // Initial eventlisteners
     buttonChangeNamePlayerOne.addEventListener("click", changePlayerName);
     buttonChangeNamePlayerTwo.addEventListener("click", changePlayerName);
- 
-    // Get the radio selection of which player starts the game and returns player
-    function getWhoStarts() {
-        const fieldsetWhoStarts = document.querySelector(".player-select > fieldset");
-        if (fieldsetWhoStarts.elements["player-one-start"].checked) return playerOne;
-        else if (fieldsetWhoStarts.elements["player-two-start"].checked) return playerTwo;
-        else if (Math.random() < 0.5) return playerOne;
-        else return playerTwo;
-    }
-
+    buttonStartGame.addEventListener("click", startGame);
+    
     function updateDisplay() {
 
     }
-
+    
     function renderPlayerName(player) {
         let playerName;
         // Select correct player name tag on DOM
         if (player === playerOne) playerName = document.querySelector(`p.player-one-name`);
-            else playerName = document.querySelector(`p.player-two-name`);
+        else playerName = document.querySelector(`p.player-two-name`);
         // Change the player's name
         playerName.textContent = `Name: ${player.getName()}`;
     }
-
+    
     function changePlayerName(event) {
         // Determine if player1 or player2
         const player = event.target.classList.contains("player-one-name") ? playerOne : playerTwo;
@@ -209,10 +204,10 @@ const display = (function displayController() {
                 gameboardElement.appendChild(button);
             }
         }
-       
+        
         return gameboardElement;
     }
-
+    
     function renderGameboard() {
         const gameboardContainer = document.querySelector(".gameboard-container");
         gameboardContainer.textContent = ""; // Clear current gameboard display;
@@ -221,10 +216,25 @@ const display = (function displayController() {
     
     function playRound(event) {
         if (event.target.textContent === "") game.playRound(event.target.dataset.position[0],event.target.dataset.position[1]);
-            else alert("Can't place marker on already occupied spot.\nPlease try again");
+        else alert("Can't place marker on already occupied spot.\nPlease try again");
         renderGameboard();
     }
-
+    
+       // Get the radio selection of which player starts the game and returns player
+       function getWhoStarts() {
+           const fieldsetWhoStarts = document.querySelector(".player-select > fieldset");
+           if (fieldsetWhoStarts.elements["player-one-start"].checked) return playerOne;
+           else if (fieldsetWhoStarts.elements["player-two-start"].checked) return playerTwo;
+           else if (Math.random() < 0.5) return playerOne;
+           else return playerTwo;
+       }
+    
+        function startGame() {
+            game.resetGame();
+            game.setInitialPlayer(getWhoStarts());
+            renderGameboard();
+        }
+    
     return {};  //???Necessary to return an interface?
 })();
 
