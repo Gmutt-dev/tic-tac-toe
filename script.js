@@ -217,7 +217,7 @@ const display = (function displayController() {
 
     function showWinner() {
         //TODO change to call dialog modal stating winner
-        alert(`The winner is: ${game.getCurrentPlayer().getName()}`);
+        alert(`The winner is: ${game.getWinner()}`);
     }
 
     function showTie() {
