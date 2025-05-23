@@ -232,11 +232,6 @@ const display = (function displayController() {
         gameboardContainer.appendChild(createGameboard());
     }
 
-    function showWinner() {
-        //TODO change to call dialog modal stating winner
-        alert(`The winner is: ${game.getWinner()}`);
-    }
-
     // Draw a line through the three winning markers
     function renderWinningSpotsLine() {
         winningSpotsPosition = game.getWinningSpots();
@@ -271,10 +266,7 @@ const display = (function displayController() {
         else if (event.target.textContent === "") {
             game.playRound(event.target.dataset.position[0],event.target.dataset.position[1]);
             renderGameboard();
-            if (game.getWinner()) {
-                showWinner();
-                renderWinningSpotsLine();
-            }
+            if (game.getWinner()) renderWinningSpotsLine();
             else if (game.isTie()) showTie();
         }
         else alert("Can't place marker on already occupied spot.\nPlease try again");
