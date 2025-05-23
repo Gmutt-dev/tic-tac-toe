@@ -30,7 +30,7 @@ const gameboard = (function() {
         return layout;
     }
 
-    //create empty gameboard array
+    // Create empty gameboard array
     function resetBoard() {
         layout.splice(0, layout.length);
         layout.push(["", "", ""]);
@@ -52,7 +52,7 @@ const gameboard = (function() {
     return {getLayout, resetBoard, placeMarker};
 })();
 
-//Game Controller function to control flow + state of game as IIFE module
+// Game Controller factory function to control flow + state of game as IIFE module
 const game = (function gameController() {
 
     let currentPlayer = {};
@@ -110,42 +110,43 @@ const game = (function gameController() {
             for (let col = 0; col < 3; col++) {
                 //for every row item (loop)
                 for (let row = 0; row < 3; row++) {
-                    //check until 3 player marks or break;
+                    // Check until 3 player marks or break;
                     if (gameboard.getLayout()[row][col] !== playerMarker)
                         break;
-                    // if 3 player marks setWinner();
+                    // If 3 player marks setWinner();
                     if (row === 2) {
                         setWinner();
                         setWinningSpots([[0, col], [1, col], [2, col], "|"]);
-                        console.log({winningSpots});
                     }
                 }
             }  
         }
         
         function checkDiagonal() {
-            //only if playerMarker === to middle spot [1][1], since diagonal win only possible if currentPlayer controls that spot
+            // Only if playerMarker === to middle spot [1][1], since diagonal win only possible if currentPlayer controls that spot
             if (playerMarker === gameboard.getLayout()[1][1]) {
-                //backward diagonal
+                // Check backward diagonal
                 if (playerMarker === gameboard.getLayout()[0][0] && playerMarker === gameboard.getLayout()[2][2]) {
                     setWinner();
                     setWinningSpots([[0, 0], [1, 1], [2, 2], "\\"]);
                 }
-                //forward diagonal
+                // Check forward diagonal
                 else if (playerMarker === gameboard.getLayout()[2][0] && playerMarker === gameboard.getLayout()[0][2]) {
                     setWinner();
                     setWinningSpots([[0, 2], [1, 1], [2, 0], "/"]);
                 }
             }
         }
-            
+        
+        // First check rows
         checkRows();
+        // Only check Columns if not already found a winner
         if (!winner) checkColumns();
+        // Only check diagonals if not already found a winner
         if (!winner) checkDiagonal();
     }
             
     function playRound(row, col) {
-        
         if (currentPlayer !== playerOne && currentPlayer !== playerTwo) {
             throw Error("First player needs to be assigned first!")
         } else if (!winner && !isTie()) {
@@ -153,9 +154,8 @@ const game = (function gameController() {
                 openSpots--;
                 checkForWin();
                 changeTurn();                
-            } // else ignore input, as spot already taken or win state or tie state
+            } // Else ignore input, as spot already taken or win state or tie state
         } else {
-            console.log(openSpots);
             throw Error("No further rounds when a winner has been declared!");
         }
     }
@@ -171,7 +171,7 @@ const game = (function gameController() {
 })();
 
 
-// Display Controller
+// Display Controller factory function as IIFE to control GUI 
 const display = (function displayController() {
     // Get outer container DOM reference
     const outerContainer = document.querySelector(".outer-container");
@@ -185,10 +185,6 @@ const display = (function displayController() {
     buttonChangeNamePlayerTwo.addEventListener("click", changePlayerName);
     buttonStartGame.addEventListener("click", startGame);
     
-    function updateDisplay() {
-
-    }
-    
     function renderPlayerName(player) {
         let playerName;
         // Select correct player name tag on DOM
@@ -199,7 +195,7 @@ const display = (function displayController() {
     }
     
     function changePlayerName(event) {
-        // Determine if player1 or player2
+        // Determine if player1 or player2 relevant change button pressed
         const player = event.target.classList.contains("player-one-name") ? playerOne : playerTwo;
         const newName = prompt(`What is the new name?`, `${player === playerOne ? "Player1" : "Player2"}`);
         player.changeName(newName);
@@ -217,20 +213,20 @@ const display = (function displayController() {
             for (let col = 0; col < gameboardLayout[row].length; col++) {
                 const button = document.createElement("button");
                 button.classList.add("spot")
+                // Label each spot with a two digit row and column number for later reference
                 button.dataset.position = `${row}${col}`;
                 button.textContent = gameboardLayout[row][col];
-                // add eventlisteners on all spots
+                // Add eventlisteners on all spots
                 button.addEventListener("click", playRound)
                 gameboardElement.appendChild(button);
             }
-        }
-        
+        }   
         return gameboardElement;
     }
     
     function renderGameboard() {
         const gameboardContainer = document.querySelector(".gameboard-container");
-        // if winner, show winner's name, else show who's turn it is
+        // If winner, show winner's name, else show who's turn it is
         gameboardContainer.textContent = (game.getWinner()) ? `The winner is ${game.getWinner()}` : `${game.getCurrentPlayer().getName()}'s turn`;
         gameboardContainer.appendChild(createGameboard());
     }
@@ -240,6 +236,7 @@ const display = (function displayController() {
         alert(`The winner is: ${game.getWinner()}`);
     }
 
+    // Draw a line through the three winning markers
     function renderWinningSpotsLine() {
         winningSpotsPosition = game.getWinningSpots();
         for (let i = 0; i < 3; i++) {
@@ -257,20 +254,19 @@ const display = (function displayController() {
                 case "\\" :
                     winningSpot.classList.add("diagonal-backward-win");
                     break;
-
             }
         }
-
     }
 
     function showTie() {
         //TODO change to call dialog modal stating winner
         alert("It's a tie!");
     }
-    
+
     function playRound(event) {
-        
+        // Don't play a round if there's already a winner or the game is tied
         if (game.getWinner() || game.isTie()) alert("Winner or Tie declared.  Please reset the game to continue");
+        // Don't place the marker if the spot is already taken
         else if (event.target.textContent === "") {
             game.playRound(event.target.dataset.position[0],event.target.dataset.position[1]);
             renderGameboard();
@@ -283,24 +279,23 @@ const display = (function displayController() {
         else alert("Can't place marker on already occupied spot.\nPlease try again");
     }
     
-       // Get the radio selection of which player starts the game and returns player
-       function getWhoStarts() {
-           const fieldsetWhoStarts = document.querySelector(".player-select > fieldset");
-           if (fieldsetWhoStarts.elements["player-one-start"].checked) return playerOne;
-           else if (fieldsetWhoStarts.elements["player-two-start"].checked) return playerTwo;
-           else if (Math.random() < 0.5) return playerOne;
-           else return playerTwo;
-       }
-    
-        function startGame() {
-            game.resetGame();
-            game.setInitialPlayer(getWhoStarts());
-            renderGameboard();
-        }
-    
-    return {renderGameboard};  //???Necessary to return an interface?
+    // Get the radio selection of which player starts the game and returns player
+    function getWhoStarts() {
+        const fieldsetWhoStarts = document.querySelector(".player-select > fieldset");
+        if (fieldsetWhoStarts.elements["player-one-start"].checked) return playerOne;
+        else if (fieldsetWhoStarts.elements["player-two-start"].checked) return playerTwo;
+        else if (Math.random() < 0.5) return playerOne;
+        else return playerTwo;
+    }
+
+    function startGame(event) {
+        game.resetGame();
+        game.setInitialPlayer(getWhoStarts());
+        renderGameboard();
+    } 
+    //no return interface required
 })();
 
-// create initial two player objects
+// Create initial two player objects when script is first run
 const playerOne = player("Player1", "X");
 const playerTwo = player("Player2", "O");
