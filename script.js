@@ -228,7 +228,7 @@ const display = (function displayController() {
     function renderGameboard() {
         const gameboardContainer = document.querySelector(".gameboard-container");
         // If winner, show winner's name, else show who's turn it is
-        gameboardContainer.textContent = (game.getWinner()) ? `The winner is ${game.getWinner()}` : `${game.getCurrentPlayer().getName()}'s turn`;
+        gameboardContainer.textContent = (game.getWinner()) ? `The winner is ${game.getWinner()}` : game.isTie() ? `It's a tie!` : `${game.getCurrentPlayer().getName()}'s turn`;
         gameboardContainer.appendChild(createGameboard());
     }
 
@@ -254,11 +254,6 @@ const display = (function displayController() {
         }
     }
 
-    function showTie() {
-        //TODO change to call dialog modal stating winner
-        alert("It's a tie!");
-    }
-
     function playRound(event) {
         // Don't play a round if there's already a winner or the game is tied
         if (game.getWinner() || game.isTie()) alert("Winner or Tie declared.  Please reset the game to continue");
@@ -267,7 +262,6 @@ const display = (function displayController() {
             game.playRound(event.target.dataset.position[0],event.target.dataset.position[1]);
             renderGameboard();
             if (game.getWinner()) renderWinningSpotsLine();
-            else if (game.isTie()) showTie();
         }
         else alert("Can't place marker on already occupied spot.\nPlease try again");
     }
