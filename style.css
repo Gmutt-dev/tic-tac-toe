@@ -100,19 +100,19 @@
                 }
 
                 &.horizontal-win {
-                    background: var(--horizontal-line)
+                    background: var(--horizontal-line);
                 }
 
                 &.vertical-win {
-                    background: var(--vertical-line)
+                    background: var(--vertical-line);
                 }
 
                 &.diagonal-forward-win {
-                    background: var(--diagonal-forward-line)
+                    background: var(--diagonal-forward-line);
                 }
 
                 &.diagonal-backward-win {
-                    background: var(--diagonal-backward-line)
+                    background: var(--diagonal-backward-line);
                 }
             }
         }
