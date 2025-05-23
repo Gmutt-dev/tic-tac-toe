@@ -14,7 +14,7 @@
 }
 
 .outer-container {
-    margin: auto;
+    margin: 10px auto;
     width: fit-content;
     max-width: 500px;
     text-align: center;
