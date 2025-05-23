@@ -6,7 +6,11 @@
 :root {
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
-    
+
+    --vertical-line: linear-gradient(to right, white 49%, black 49% 51%, white 51%);
+    --horizontal-line: linear-gradient(to bottom, white 49%, black 49% 51%, white 51%);
+    --diagonal-backward-line: linear-gradient(to top right, white 49%, black 49% 51%, white 51%);
+    --diagonal-forward-line: linear-gradient(to bottom right, white 49%, black 49% 51%, white 51%);
 }
 
 .outer-container {
@@ -93,6 +97,22 @@
         
                 &:hover {
                     background-color: lightgray;
+                }
+
+                &.horizontal-win {
+                    background: var(--horizontal-line)
+                }
+
+                &.vertical-win {
+                    background: var(--vertical-line)
+                }
+
+                &.diagonal-forward-win {
+                    background: var(--diagonal-forward-line)
+                }
+
+                &.diagonal-backward-win {
+                    background: var(--diagonal-backward-line)
                 }
             }
         }

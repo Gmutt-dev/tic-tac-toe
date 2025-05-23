@@ -58,6 +58,7 @@ const game = (function gameController() {
     let currentPlayer = {};
     let openSpots = 9;
     let winner = "";
+    let winningSpots = [];
 
     function setInitialPlayer(player) {
         if (currentPlayer !== playerOne && currentPlayer !== playerTwo) currentPlayer = player;
@@ -72,8 +73,16 @@ const game = (function gameController() {
         winner = currentPlayer.getName();
     }
 
+    function setWinningSpots(spots) {
+        winningSpots = spots;
+    }
+
     function getWinner() {
         return winner;
+    }
+
+    function getWinningSpots() {
+        return winningSpots;
     }
 
     function changeTurn() {
@@ -88,9 +97,11 @@ const game = (function gameController() {
         const playerMarker = currentPlayer.getMarker();
         
         function checkRows() {
-            gameboard.getLayout().forEach((row) => {
-                if (row.filter((mark) => mark === playerMarker).length === 3)
+            gameboard.getLayout().forEach((rowValue, rowNo) => {
+                if (rowValue.filter((mark) => mark === playerMarker).length === 3) {
                     setWinner();
+                    setWinningSpots([[rowNo, 0], [rowNo, 1], [rowNo, 2], "-"]);
+                }
             });
         }
         
@@ -103,8 +114,11 @@ const game = (function gameController() {
                     if (gameboard.getLayout()[row][col] !== playerMarker)
                         break;
                     // if 3 player marks setWinner();
-                    if (row === 2)
+                    if (row === 2) {
                         setWinner();
+                        setWinningSpots([[0, col], [1, col], [2, col], "|"]);
+                        console.log({winningSpots});
+                    }
                 }
             }  
         }
@@ -112,11 +126,16 @@ const game = (function gameController() {
         function checkDiagonal() {
             //only if playerMarker === to middle spot [1][1], since diagonal win only possible if currentPlayer controls that spot
             if (playerMarker === gameboard.getLayout()[1][1]) {
-                if (
-                    playerMarker === gameboard.getLayout()[0][0] && playerMarker === gameboard.getLayout()[2][2] || //backward diagonal
-                    playerMarker === gameboard.getLayout()[2][0] && playerMarker === gameboard.getLayout()[0][2]    //forward diagonal
-                )
-                setWinner();
+                //backward diagonal
+                if (playerMarker === gameboard.getLayout()[0][0] && playerMarker === gameboard.getLayout()[2][2]) {
+                    setWinner();
+                    setWinningSpots([[0, 0], [1, 1], [2, 2], "\\"]);
+                }
+                //forward diagonal
+                else if (playerMarker === gameboard.getLayout()[2][0] && playerMarker === gameboard.getLayout()[0][2]) {
+                    setWinner();
+                    setWinningSpots([[0, 2], [1, 1], [2, 0], "/"]);
+                }
             }
         }
             
@@ -148,7 +167,7 @@ const game = (function gameController() {
         gameboard.resetBoard();
     }
      
-    return {setInitialPlayer, getCurrentPlayer, getWinner, isTie, playRound, resetGame}; 
+    return {setInitialPlayer, getCurrentPlayer, getWinner, getWinningSpots, isTie, playRound, resetGame}; 
 })();
 
 
@@ -221,6 +240,29 @@ const display = (function displayController() {
         alert(`The winner is: ${game.getWinner()}`);
     }
 
+    function renderWinningSpotsLine() {
+        winningSpotsPosition = game.getWinningSpots();
+        for (let i = 0; i < 3; i++) {
+            const winningSpot = document.querySelector(`.gameboard-container .spot[data-position="${winningSpotsPosition[i][0].toString() + winningSpotsPosition[i][1].toString()}"`);
+            switch (winningSpotsPosition[3]) {
+                case "-" :
+                    winningSpot.classList.add("horizontal-win");
+                    break;
+                case "|" :
+                    winningSpot.classList.add("vertical-win");
+                    break;
+                case "/" :
+                    winningSpot.classList.add("diagonal-forward-win");
+                    break;
+                case "\\" :
+                    winningSpot.classList.add("diagonal-backward-win");
+                    break;
+
+            }
+        }
+
+    }
+
     function showTie() {
         //TODO change to call dialog modal stating winner
         alert("It's a tie!");
@@ -232,7 +274,10 @@ const display = (function displayController() {
         else if (event.target.textContent === "") {
             game.playRound(event.target.dataset.position[0],event.target.dataset.position[1]);
             renderGameboard();
-            if (game.getWinner()) showWinner();
+            if (game.getWinner()) {
+                showWinner();
+                renderWinningSpotsLine();
+            }
             else if (game.isTie()) showTie();
         }
         else alert("Can't place marker on already occupied spot.\nPlease try again");
@@ -253,7 +298,7 @@ const display = (function displayController() {
             renderGameboard();
         }
     
-    return {};  //???Necessary to return an interface?
+    return {renderGameboard};  //???Necessary to return an interface?
 })();
 
 // create initial two player objects
