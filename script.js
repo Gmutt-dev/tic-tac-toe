@@ -198,7 +198,8 @@ const display = (function displayController() {
         // Determine if player1 or player2 relevant change button pressed
         const player = event.target.classList.contains("player-one-name") ? playerOne : playerTwo;
         const newName = prompt(`What is the new name?`, `${player === playerOne ? "Player1" : "Player2"}`);
-        player.changeName(newName);
+        // Only change the name if the return value is not Null (when cancel button is pressed)
+        if (newName !== null) player.changeName(newName);
         renderPlayerName(player);
     }
 
